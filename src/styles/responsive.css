@@ -1,0 +1,39 @@
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 360px 1fr;
+  }
+  .kpi-row {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .analysis-grid {
+    grid-template-columns: 1fr;
+  }
+  .entities-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  .kpi-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .kpi-row {
+    grid-template-columns: 1fr;
+  }
+  .entities-grid {
+    grid-template-columns: 1fr;
+  }
+  .viewer-meta-grid {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
