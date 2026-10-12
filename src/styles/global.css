@@ -10,12 +10,12 @@
   --bg-header: rgba(10, 13, 20, 0.85);
   --bg-panel: rgba(14, 18, 28, 0.75);
   --bg-card: rgba(19, 24, 38, 0.7);
-  --bg-card-hover: rgba(28, 35, 54, 0.9);
+  --bg-card-hover: rgba(28, 35, 54, 0.95);
   --bg-input: rgba(15, 20, 31, 0.9);
   
   --border-color: rgba(255, 255, 255, 0.08);
-  --border-subtle: rgba(255, 255, 255, 0.14);
-  --border-glow: rgba(139, 92, 246, 0.45);
+  --border-subtle: rgba(255, 255, 255, 0.15);
+  --border-glow: rgba(139, 92, 246, 0.5);
   
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
@@ -23,7 +23,7 @@
   
   --accent-purple: #8b5cf6;
   --accent-purple-hover: #7c3aed;
-  --accent-purple-glow: rgba(139, 92, 246, 0.35);
+  --accent-purple-glow: rgba(139, 92, 246, 0.4);
   --accent-purple-dim: rgba(139, 92, 246, 0.14);
 
   --risk-critical: #f87171;
@@ -39,13 +39,16 @@
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
+
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
   font-family: var(--font-family);
   background-color: var(--bg-app);
   background-image: 
-    radial-gradient(at 15% 15%, rgba(139, 92, 246, 0.08) 0px, transparent 45%),
+    radial-gradient(at 15% 15%, rgba(139, 92, 246, 0.09) 0px, transparent 45%),
     radial-gradient(at 85% 85%, rgba(56, 189, 248, 0.05) 0px, transparent 50%);
   background-attachment: fixed;
   color: var(--text-primary);
@@ -63,15 +66,16 @@ button {
   color: inherit;
   user-select: none;
   touch-action: manipulation;
-  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.15s ease,
-              box-shadow 0.2s ease;
+  will-change: transform, opacity, background-color;
+  transition: transform 0.2s var(--ease-spring),
+              background-color 0.25s var(--ease-smooth),
+              color 0.25s var(--ease-smooth),
+              border-color 0.25s var(--ease-smooth),
+              box-shadow 0.25s var(--ease-smooth);
 }
 
 button:active {
-  transform: scale(0.97);
+  transform: scale(0.96) !important;
 }
 
 button:disabled {
@@ -82,13 +86,15 @@ button:disabled {
 
 button:focus-visible, input:focus-visible, select:focus-visible {
   outline: 2px solid var(--accent-purple);
-  outline-offset: 1px;
+  outline-offset: 2px;
 }
 
 input, select, textarea {
   font-family: inherit;
   font-size: 13px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.25s var(--ease-smooth),
+              box-shadow 0.25s var(--ease-smooth),
+              background-color 0.25s var(--ease-smooth);
 }
 
 ::-webkit-scrollbar {
@@ -99,35 +105,51 @@ input, select, textarea {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 4px;
+  transition: background 0.3s ease;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.25);
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Smooth Hardware-Accelerated Animations */
+@keyframes smoothFadeUp {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.96); }
-  to { opacity: 1; transform: scale(1); }
+@keyframes smoothScaleIn {
+  0% {
+    opacity: 0;
+    transform: scale3d(0.96, 0.96, 1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1);
+  }
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 10px rgba(124, 58, 237, 0.35); }
-  50% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.65); }
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(124, 58, 237, 0.35);
+    border-color: rgba(167, 139, 250, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(139, 92, 246, 0.7);
+    border-color: rgba(196, 181, 253, 0.7);
+  }
 }
 
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
-
-.spinner {
-  animation: spin 0.8s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
