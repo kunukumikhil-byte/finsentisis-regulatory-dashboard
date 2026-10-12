@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Bookmark, ArrowRight } from 'lucide-react';
 import RiskBadge from '../common/RiskBadge';
 
@@ -9,9 +10,12 @@ export default function RegulationCard({
   onToggleBookmark 
 }) {
   return (
-    <div 
+    <motion.div 
       className={`regulation-card ${isSelected ? 'selected' : ''}`}
       onClick={() => onSelect(regulation)}
+      whileHover={{ y: -3, scale: 1.012 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 400, damping: 28 }}
     >
       <div className="reg-card-top">
         <span className="reg-source-badge">{regulation.shortName}</span>
@@ -42,6 +46,6 @@ export default function RegulationCard({
           View Regulation <ArrowRight size={11} />
         </span>
       </div>
-    </div>
+    </motion.div>
   );
 }

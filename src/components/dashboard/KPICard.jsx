@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { MoreVertical } from 'lucide-react';
 
 export default function KPICard({ title, value, trend, isConfidence = false, onAction }) {
@@ -18,7 +19,13 @@ export default function KPICard({ title, value, trend, isConfidence = false, onA
   }, [menuOpen]);
 
   return (
-    <div className="kpi-card" ref={menuRef}>
+    <motion.div 
+      className="kpi-card" 
+      ref={menuRef}
+      whileHover={{ y: -6, scale: 1.02 }}
+      whileTap={{ scale: 0.97 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+    >
       <div className="kpi-header">
         <span className="kpi-title">{title}</span>
         <button 
@@ -37,16 +44,24 @@ export default function KPICard({ title, value, trend, isConfidence = false, onA
         {trend}
       </div>
 
-      {menuOpen && (
-        <div className="kpi-dropdown-menu">
-          <div className="kpi-dropdown-item" onClick={() => { setMenuOpen(false); onAction?.(`Export metric for ${title}`); }}>
-            Export Metric
-          </div>
-          <div className="kpi-dropdown-item" onClick={() => { setMenuOpen(false); onAction?.(`Historical trends for ${title}`); }}>
-            View History
-          </div>
-        </div>
-      )}
-    </div>
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div 
+            className="kpi-dropdown-menu"
+            initial={{ opacity: 0, scale: 0.9, y: -6 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: -6 }}
+            transition={{ type: "spring", stiffness: 450, damping: 25 }}
+          >
+            <div className="kpi-dropdown-item" onClick={() => { setMenuOpen(false); onAction?.(`Export metric for ${title}`); }}>
+              Export Metric
+            </div>
+            <div className="kpi-dropdown-item" onClick={() => { setMenuOpen(false); onAction?.(`Historical trends for ${title}`); }}>
+              View History
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }

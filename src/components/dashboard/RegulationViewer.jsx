@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { MoreVertical, ExternalLink } from 'lucide-react';
 import RegulationTabs from './RegulationTabs';
 import RegulationText from './RegulationText';
@@ -17,14 +18,20 @@ export default function RegulationViewer({
 
   if (!regulation) {
     return (
-      <div className="panel-viewer mac-page-pop" style={{ padding: '32px', textAlign: 'center', color: '#94a3b8' }}>
+      <div className="panel-viewer" style={{ padding: '32px', textAlign: 'center', color: '#94a3b8' }}>
         No regulation selected.
       </div>
     );
   }
 
   return (
-    <div className="panel-viewer mac-page-pop" key={regulation.id}>
+    <motion.div 
+      className="panel-viewer" 
+      key={regulation.id}
+      initial={{ opacity: 0, scale: 0.95, y: 15 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 380, damping: 28 }}
+    >
       <div className="viewer-header">
         <div>
           <div className="viewer-title-row">
@@ -57,99 +64,110 @@ export default function RegulationViewer({
 
       <RegulationTabs activeTab={activeTab} onSelectTab={setActiveTab} />
 
-      {/* Tab container with Apple Safari-style page pop effect */}
-      <div className="viewer-body mac-tab-pop" key={activeTab}>
-        {activeTab === 'Overview' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <RegulationText 
-              articles={showAllArticles ? regulation.articles : regulation.articles.slice(0, 3)} 
-              onViewAll={() => setShowAllArticles(prev => !prev)} 
-            />
-            <AIInterpretationAnalysis 
-              analysisData={analysisData} 
-              onOpenModal={onOpenAnalysisModal}
-            />
-            <LinkedEntitiesImpacted 
-              entities={entitiesData} 
-              onSelectEntity={onOpenEntityModal}
-            />
-          </div>
-        )}
-
-        {activeTab === 'Full Text' && (
-          <div style={{ padding: '4px 0' }}>
-            <h4 style={{ color: '#fff', marginBottom: '8px', fontSize: '13.5px' }}>
-              Consolidated Legal Text — {regulation.title}
-            </h4>
-            <p style={{ color: '#94a3b8', fontSize: '12.5px', marginBottom: '16px' }}>
-              Official text copy verified by {regulation.sourceAuthority}. Sets harmonized criteria for high-risk AI models and accountability pipelines.
-            </p>
-            {regulation.articles.map((art) => (
-              <div key={art.number} className="article-card">
-                <div className="article-num">Article {art.number}</div>
-                <div className="article-title">{art.title}</div>
-                <div className="article-desc">{art.summary}</div>
+      {/* JavaScript-Powered Tab Page-Pop Container */}
+      <div className="viewer-body" style={{ position: 'relative', overflow: 'hidden' }}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, scale: 0.93, y: 18 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: -12 }}
+            transition={{ type: "spring", stiffness: 360, damping: 26 }}
+            style={{ width: '100%' }}
+          >
+            {activeTab === 'Overview' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <RegulationText 
+                  articles={showAllArticles ? regulation.articles : regulation.articles.slice(0, 3)} 
+                  onViewAll={() => setShowAllArticles(prev => !prev)} 
+                />
+                <AIInterpretationAnalysis 
+                  analysisData={analysisData} 
+                  onOpenModal={onOpenAnalysisModal}
+                />
+                <LinkedEntitiesImpacted 
+                  entities={entitiesData} 
+                  onSelectEntity={onOpenEntityModal}
+                />
               </div>
-            ))}
-          </div>
-        )}
+            )}
 
-        {activeTab === 'Amendment History' && (
-          <div style={{ padding: '4px 0', color: '#94a3b8', fontSize: '12.5px' }}>
-            <div className="article-card">
-              <div className="article-num">Update 1.0.3 • August 2025</div>
-              <div className="article-title">Realignment with Harmonised Technical Standards</div>
-              <div className="article-desc">Updated conformity assessment procedures under Article 43 for high-risk biometric identification models.</div>
-            </div>
-            <div className="article-card">
-              <div className="article-num">Update 1.0.2 • June 2025</div>
-              <div className="article-title">Transparency Clarification for GPAI Models</div>
-              <div className="article-desc">Systemic risk indicators codified for foundation models exceeding 10^25 FLOPs training thresholds.</div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'Jurisdiction' && (
-          <div style={{ padding: '4px 0', color: '#94a3b8', fontSize: '12.5px' }}>
-            <div className="article-card">
-              <div className="article-num">Applicable Region</div>
-              <div className="article-title">{regulation.jurisdiction}</div>
-              <div className="article-desc">
-                Direct applicability across member territories with extraterritorial reach applied to commercial systems serving users inside the target market.
+            {activeTab === 'Full Text' && (
+              <div style={{ padding: '4px 0' }}>
+                <h4 style={{ color: '#fff', marginBottom: '8px', fontSize: '13.5px' }}>
+                  Consolidated Legal Text — {regulation.title}
+                </h4>
+                <p style={{ color: '#94a3b8', fontSize: '12.5px', marginBottom: '16px' }}>
+                  Official text copy verified by {regulation.sourceAuthority}. Sets harmonized criteria for high-risk AI models and accountability pipelines.
+                </p>
+                {regulation.articles.map((art) => (
+                  <div key={art.number} className="article-card">
+                    <div className="article-num">Article {art.number}</div>
+                    <div className="article-title">{art.title}</div>
+                    <div className="article-desc">{art.summary}</div>
+                  </div>
+                ))}
               </div>
-            </div>
-          </div>
-        )}
+            )}
 
-        {activeTab === 'Related Laws' && (
-          <div style={{ padding: '4px 0', color: '#94a3b8', fontSize: '12.5px' }}>
-            <div className="article-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <div className="article-title">Regulation (EU) 2016/679 (GDPR)</div>
-                <div className="article-desc">Shared obligations concerning algorithmic transparency and user consent.</div>
+            {activeTab === 'Amendment History' && (
+              <div style={{ padding: '4px 0', color: '#94a3b8', fontSize: '12.5px' }}>
+                <div className="article-card">
+                  <div className="article-num">Update 1.0.3 • August 2025</div>
+                  <div className="article-title">Realignment with Harmonised Technical Standards</div>
+                  <div className="article-desc">Updated conformity assessment procedures under Article 43 for high-risk biometric identification models.</div>
+                </div>
+                <div className="article-card">
+                  <div className="article-num">Update 1.0.2 • June 2025</div>
+                  <div className="article-title">Transparency Clarification for GPAI Models</div>
+                  <div className="article-desc">Systemic risk indicators codified for foundation models exceeding 10^25 FLOPs training thresholds.</div>
+                </div>
               </div>
-              <ExternalLink size={14} color="#8b5cf6" />
-            </div>
-            <div className="article-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div>
-                <div className="article-title">Digital Services Act (EU DSA)</div>
-                <div className="article-desc">Intermediary liability and risk assessments for VLOPs.</div>
-              </div>
-              <ExternalLink size={14} color="#8b5cf6" />
-            </div>
-          </div>
-        )}
+            )}
 
-        {activeTab === 'Interpretation Log' && (
-          <div style={{ padding: '4px 0', color: '#94a3b8', fontSize: '12.5px' }}>
-            <div className="article-card">
-              <div className="article-num">Audit Verification Log</div>
-              <div className="article-title">Autonomous Scan Execution #8924</div>
-              <div className="article-desc">Completed with 94.7% confidence model. Internal legal counsel confirmed all human oversight triggers.</div>
-            </div>
-          </div>
-        )}
+            {activeTab === 'Jurisdiction' && (
+              <div style={{ padding: '4px 0', color: '#94a3b8', fontSize: '12.5px' }}>
+                <div className="article-card">
+                  <div className="article-num">Applicable Region</div>
+                  <div className="article-title">{regulation.jurisdiction}</div>
+                  <div className="article-desc">
+                    Direct applicability across member territories with extraterritorial reach applied to commercial systems serving users inside the target market.
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'Related Laws' && (
+              <div style={{ padding: '4px 0', color: '#94a3b8', fontSize: '12.5px' }}>
+                <div className="article-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div className="article-title">Regulation (EU) 2016/679 (GDPR)</div>
+                    <div className="article-desc">Shared obligations concerning algorithmic transparency and user consent.</div>
+                  </div>
+                  <ExternalLink size={14} color="#8b5cf6" />
+                </div>
+                <div className="article-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div className="article-title">Digital Services Act (EU DSA)</div>
+                    <div className="article-desc">Intermediary liability and risk assessments for VLOPs.</div>
+                  </div>
+                  <ExternalLink size={14} color="#8b5cf6" />
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'Interpretation Log' && (
+              <div style={{ padding: '4px 0', color: '#94a3b8', fontSize: '12.5px' }}>
+                <div className="article-card">
+                  <div className="article-num">Audit Verification Log</div>
+                  <div className="article-title">Autonomous Scan Execution #8924</div>
+                  <div className="article-desc">Completed with 94.7% confidence model. Internal legal counsel confirmed all human oversight triggers.</div>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
-    </div>
+    </motion.div>
   );
 }

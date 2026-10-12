@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
 
 export default function Modal({ isOpen, onClose, title, children, footer }) {
@@ -12,24 +13,36 @@ export default function Modal({ isOpen, onClose, title, children, footer }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div 
-        className="modal-dialog" 
-        style={{ animation: 'macSheetOpen 0.38s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="modal-header">
-          <h3 className="modal-title">{title}</h3>
-          <button className="header-icon-btn" onClick={onClose} aria-label="Close modal">
-            <X size={16} />
-          </button>
-        </div>
-        <div className="modal-body">{children}</div>
-        {footer && <div className="modal-footer">{footer}</div>}
-      </div>
-    </div>
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div 
+          className="modal-overlay" 
+          onClick={onClose}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <motion.div 
+            className="modal-dialog" 
+            onClick={(e) => e.stopPropagation()}
+            initial={{ opacity: 0, scale: 0.88, y: -40 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: -25 }}
+            transition={{ type: "spring", stiffness: 420, damping: 28 }}
+          >
+            <div className="modal-header">
+              <h3 className="modal-title">{title}</h3>
+              <button className="header-icon-btn" onClick={onClose} aria-label="Close modal">
+                <X size={16} />
+              </button>
+            </div>
+            <div className="modal-body">{children}</div>
+            {footer && <div className="modal-footer">{footer}</div>}
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
