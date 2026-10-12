@@ -21,7 +21,9 @@ export default function Sidebar({
   activeNav, 
   onSelectNav, 
   isCollapsed = false, 
-  onToggleCollapse 
+  onToggleCollapse,
+  isMobileOpen = false,
+  onCloseMobile
 }) {
   const [profileOpen, setProfileOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -65,28 +67,40 @@ export default function Sidebar({
   );
 
   return (
-    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
+    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isMobileOpen ? 'mobile-open' : ''}`}>
       <div className="sidebar-brand">
         <div className="brand-wrapper">
           <div className="brand-icon">F</div>
-          {!isCollapsed && (
+          {(!isCollapsed || isMobileOpen) && (
             <div>
               <div className="brand-title">Finsentsis</div>
               <div className="brand-subtitle">Operating System</div>
             </div>
           )}
         </div>
+        
+        {/* Desktop Collapse Button */}
         <button 
-          className="sidebar-collapse-btn" 
+          className="sidebar-collapse-btn desktop-only" 
           onClick={onToggleCollapse}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
+
+        {/* Mobile Close Button */}
+        <button 
+          className="sidebar-collapse-btn mobile-close-btn" 
+          onClick={onCloseMobile}
+          aria-label="Close menu"
+          title="Close menu"
+        >
+          <X size={18} />
+        </button>
       </div>
 
-      {!isCollapsed && (
+      {(!isCollapsed || isMobileOpen) && (
         <div className="sidebar-search-container">
           <div className="sidebar-search-box">
             <Search size={14} color="#64748b" />
@@ -112,7 +126,7 @@ export default function Sidebar({
       <div className="sidebar-nav">
         <div className="nav-section-title">
           <span>Dashboard</span>
-          {!isCollapsed && <ChevronDown size={12} />}
+          {(!isCollapsed || isMobileOpen) && <ChevronDown size={12} />}
         </div>
 
         {filteredNav.map((item) => {
@@ -123,7 +137,7 @@ export default function Sidebar({
               key={item.label}
               className={`nav-item ${isActive ? 'active' : ''}`}
               onClick={() => onSelectNav(item.label)}
-              title={isCollapsed ? item.label : undefined}
+              title={isCollapsed && !isMobileOpen ? item.label : undefined}
             >
               <Icon size={16} />
               <span>{item.label}</span>
@@ -131,7 +145,7 @@ export default function Sidebar({
           );
         })}
 
-        {filteredNav.length === 0 && !isCollapsed && (
+        {filteredNav.length === 0 && (!isCollapsed || isMobileOpen) && (
           <div style={{ padding: '12px 10px', fontSize: '11px', color: '#64748b' }}>
             No modules found.
           </div>
@@ -156,7 +170,7 @@ export default function Sidebar({
           <span>Settings</span>
         </div>
 
-        {profileOpen && !isCollapsed && (
+        {profileOpen && (!isCollapsed || isMobileOpen) && (
           <div className="profile-dropdown-menu">
             <div className="profile-dropdown-item" onClick={() => { setProfileOpen(false); onSelectNav('User Profile'); }}>
               <User size={13} /> View Profile

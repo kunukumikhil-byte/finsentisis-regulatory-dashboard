@@ -19,6 +19,7 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
+  // Modals & Feedback
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
   const [isWorkflowOpen, setIsWorkflowOpen] = useState(false);
   const [isAddEntityOpen, setIsAddEntityOpen] = useState(false);
@@ -50,6 +51,18 @@ export default function App() {
     }
     loadData();
   }, []);
+
+  // Prevent background scroll when mobile sidebar is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
   const handleSelectRegulation = async (reg) => {
     setSelectedRegulation(reg);
@@ -92,22 +105,25 @@ export default function App() {
 
   return (
     <div className="app-container">
+      {/* Mobile Drawer Overlay */}
       <div 
         className={`sidebar-overlay ${mobileMenuOpen ? 'active' : ''}`} 
         onClick={() => setMobileMenuOpen(false)} 
+        aria-hidden="true"
       />
 
-      <div className={`sidebar ${mobileMenuOpen ? 'mobile-open' : ''} ${sidebarCollapsed ? 'collapsed' : ''}`}>
-        <Sidebar 
-          activeNav={activeNav}
-          onSelectNav={(nav) => {
-            setActiveNav(nav);
-            setMobileMenuOpen(false);
-          }}
-          isCollapsed={sidebarCollapsed}
-          onToggleCollapse={() => setSidebarCollapsed(prev => !prev)}
-        />
-      </div>
+      {/* Single Sidebar Instance with correct classes */}
+      <Sidebar 
+        activeNav={activeNav}
+        onSelectNav={(nav) => {
+          setActiveNav(nav);
+          setMobileMenuOpen(false);
+        }}
+        isCollapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(prev => !prev)}
+        isMobileOpen={mobileMenuOpen}
+        onCloseMobile={() => setMobileMenuOpen(false)}
+      />
 
       <div className="main-wrapper">
         <Header 
@@ -173,6 +189,7 @@ export default function App() {
         </main>
       </div>
 
+      {/* Reusable Modals */}
       <AskCopilotModal 
         isOpen={isCopilotOpen} 
         onClose={() => setIsCopilotOpen(false)} 
@@ -192,6 +209,7 @@ export default function App() {
         items={detailModal.items}
       />
 
+      {/* Accessible Floating Toast */}
       {toastMessage && (
         <div style={{
           position: 'fixed',
