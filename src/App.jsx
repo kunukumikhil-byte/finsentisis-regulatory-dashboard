@@ -11,16 +11,24 @@ import DetailListModal from './components/modals/DetailListModal';
 import { regulationService } from './services/regulationService';
 
 export default function App() {
+  const [activeNav, setActiveNav] = useState('AI Regulatory Intelligence Layer');
   const [regulations, setRegulations] = useState([]);
   const [selectedRegulation, setSelectedRegulation] = useState(null);
   const [analysisData, setAnalysisData] = useState(null);
   const [entitiesData, setEntitiesData] = useState([]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
   const [isWorkflowOpen, setIsWorkflowOpen] = useState(false);
   const [isAddEntityOpen, setIsAddEntityOpen] = useState(false);
   const [detailModal, setDetailModal] = useState({ open: false, title: '', items: [] });
+  const [toastMessage, setToastMessage] = useState('');
+
+  const triggerToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(''), 3200);
+  };
 
   useEffect(() => {
     async function loadData() {
@@ -61,25 +69,24 @@ export default function App() {
     setRegulations(prev => prev.map(item => 
       item.id === id ? { ...item, bookmarked: !item.bookmarked } : item
     ));
+    triggerToast("Regulation bookmark toggled");
   };
 
   const handleQuickAction = async (actionType, payload) => {
     if (actionType === 'uploadFile') {
-      alert(`Contract / Document uploaded: "${payload}". File queued for AI compliance parsing.`);
+      triggerToast(`Contract "${payload}" received for compliance scan.`);
     } else if (actionType === 'createWorkflow') {
       setIsWorkflowOpen(true);
     } else if (actionType === 'addEntity') {
       setIsAddEntityOpen(true);
     } else if (actionType === 'runScan') {
-      const confirmed = window.confirm("Initiate real-time compliance scan across active regulatory feeds?");
-      if (confirmed) {
-        const scanRes = await regulationService.runComplianceScan();
-        alert(`Compliance Scan Completed! Score: ${scanRes.score}% (${scanRes.issuesDetected} findings logged).`);
-      }
+      triggerToast("AI Compliance scan initiated...");
+      const scanRes = await regulationService.runComplianceScan();
+      triggerToast(`Compliance scan completed: Score ${scanRes.score}% (${scanRes.issuesDetected} findings)`);
     } else if (actionType === 'generateReport') {
-      alert("Executive Regulatory Impact Report (PDF) exported successfully.");
+      triggerToast("Executive Compliance Audit (PDF) generated.");
     } else if (actionType === 'moreActions') {
-      alert("Additional compliance tools: Policy Differ, Hash Verifier, Sandbox Engine.");
+      triggerToast("Policy Differ and Evidence Verifier active.");
     }
   };
 
@@ -90,47 +97,79 @@ export default function App() {
         onClick={() => setMobileMenuOpen(false)} 
       />
 
-      <div className={`sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
-        <Sidebar onSelectNav={() => setMobileMenuOpen(false)} />
+      <div className={`sidebar ${mobileMenuOpen ? 'mobile-open' : ''} ${sidebarCollapsed ? 'collapsed' : ''}`}>
+        <Sidebar 
+          activeNav={activeNav}
+          onSelectNav={(nav) => {
+            setActiveNav(nav);
+            setMobileMenuOpen(false);
+          }}
+          isCollapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed(prev => !prev)}
+        />
       </div>
 
       <div className="main-wrapper">
         <Header 
+          activeNav={activeNav}
           onToggleSidebar={() => setMobileMenuOpen(prev => !prev)}
           onOpenCopilot={() => setIsCopilotOpen(true)}
-          onOpenSettings={() => alert("Settings panel will connect to NestJS configuration.")}
-          onOpenNotifications={() => alert("0 unread alerts: All systems compliant.")}
+          onOpenSettings={() => triggerToast("Compliance settings configured.")}
         />
 
         <main className="dashboard-content">
           <QuickActionDrawer onAction={handleQuickAction} />
 
           <div className="dashboard-heading-area">
-            <h1 className="dashboard-title">AI Regulatory Intelligence Layer</h1>
+            <h1 className="dashboard-title">{activeNav}</h1>
             <p className="dashboard-subtext">
-              Track spend, applications, and hires across all job channels. Identify wasteful spend and optimize budget.
+              Track regulations, obligations, and organizational exposure across global legal frameworks.
             </p>
           </div>
 
-          <KPICardsRow />
+          {activeNav === 'AI Regulatory Intelligence Layer' ? (
+            <>
+              <KPICardsRow onAction={(metric) => triggerToast(metric)} />
 
-          <div className="dashboard-grid">
-            <GlobalRegulationsFeed 
-              regulations={regulations}
-              selectedId={selectedRegulation?.id}
-              onSelectRegulation={handleSelectRegulation}
-              onToggleBookmark={handleToggleBookmark}
-              onViewAll={() => alert("All 12,842 regulations loaded in repository.")}
-            />
+              <div className="dashboard-grid">
+                <GlobalRegulationsFeed 
+                  regulations={regulations}
+                  selectedId={selectedRegulation?.id}
+                  onSelectRegulation={handleSelectRegulation}
+                  onToggleBookmark={handleToggleBookmark}
+                  onViewAll={() => triggerToast(`Loaded full registry of ${regulations.length} active regulations.`)}
+                />
 
-            <RegulationViewer 
-              regulation={selectedRegulation}
-              analysisData={analysisData}
-              entitiesData={entitiesData}
-              onOpenAnalysisModal={(title, items) => setDetailModal({ open: true, title, items })}
-              onOpenEntityModal={(entity) => setDetailModal({ open: true, title: `Impacted ${entity.type}`, items: entity.items })}
-            />
-          </div>
+                <RegulationViewer 
+                  regulation={selectedRegulation}
+                  analysisData={analysisData}
+                  entitiesData={entitiesData}
+                  onOpenAnalysisModal={(title, items) => setDetailModal({ open: true, title, items })}
+                  onOpenEntityModal={(entity) => setDetailModal({ open: true, title: `Impacted ${entity.type}`, items: entity.items })}
+                />
+              </div>
+            </>
+          ) : (
+            <div style={{
+              background: 'var(--bg-panel)',
+              border: '1px solid var(--border-color)',
+              borderRadius: 'var(--radius-md)',
+              padding: '40px',
+              textAlign: 'center',
+              animation: 'fadeIn 0.25s ease'
+            }}>
+              <h2 style={{ fontSize: '18px', color: '#fff', marginBottom: '8px' }}>{activeNav} Workspace</h2>
+              <p style={{ color: '#94a3b8', fontSize: '12.5px', maxWidth: '500px', margin: '0 auto 20px' }}>
+                Automated continuous sync established with the core regulatory radar. Real-time updates and active monitors configured for this sub-module.
+              </p>
+              <button 
+                className="btn-primary" 
+                onClick={() => setActiveNav('AI Regulatory Intelligence Layer')}
+              >
+                Return to Intelligence Layer
+              </button>
+            </div>
+          )}
         </main>
       </div>
 
@@ -152,6 +191,25 @@ export default function App() {
         title={detailModal.title}
         items={detailModal.items}
       />
+
+      {toastMessage && (
+        <div style={{
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          background: '#161b2a',
+          border: '1px solid rgba(139, 92, 246, 0.4)',
+          borderRadius: '8px',
+          padding: '10px 16px',
+          color: '#f8fafc',
+          fontSize: '12px',
+          boxShadow: '0 12px 28px rgba(0,0,0,0.6)',
+          zIndex: 1000,
+          animation: 'fadeIn 0.2s ease'
+        }}>
+          {toastMessage}
+        </div>
+      )}
     </div>
   );
 }

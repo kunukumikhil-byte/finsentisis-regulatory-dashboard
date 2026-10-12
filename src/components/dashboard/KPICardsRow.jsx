@@ -1,7 +1,7 @@
 import React from 'react';
 import KPICard from './KPICard';
 
-export default function KPICardsRow() {
+export default function KPICardsRow({ onAction }) {
   const cards = [
     { title: "Total Regulations Tracked", value: "12,842", trend: "↑ 380 VS Last Month" },
     { title: "Countries Active", value: "142", trend: "↑ 5 VS Last Month" },
@@ -13,7 +13,7 @@ export default function KPICardsRow() {
   return (
     <div className="kpi-row">
       {cards.map((c, i) => (
-        <KPICard key={i} {...c} />
+        <KPICard key={i} {...c} onAction={onAction} />
       ))}
     </div>
   );

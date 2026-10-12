@@ -56,7 +56,7 @@
   flex-direction: column;
   justify-content: space-between;
   backdrop-filter: blur(12px);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 .kpi-card:hover {
   border-color: var(--border-subtle);
@@ -93,6 +93,32 @@
 .kpi-trend.positive { color: #38bdf8; }
 .kpi-trend.confidence { color: #34d399; }
 
+.kpi-dropdown-menu {
+  position: absolute;
+  top: 36px;
+  right: 12px;
+  background: #161b2a;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 6px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
+  z-index: 20;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.kpi-dropdown-item {
+  padding: 7px 10px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.kpi-dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
 .panel-feed {
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
@@ -123,6 +149,32 @@
   gap: 6px;
 }
 
+.feed-quick-filters {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px 0;
+  overflow-x: auto;
+}
+
+.filter-pill {
+  padding: 3px 9px;
+  font-size: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.02);
+  font-weight: 500;
+}
+.filter-pill:hover {
+  color: #fff;
+  border-color: var(--border-subtle);
+}
+.filter-pill.active {
+  background: var(--accent-purple-dim);
+  border-color: var(--accent-purple);
+  color: #ddd6fe;
+}
+
 .feed-list {
   display: flex;
   flex-direction: column;
@@ -136,7 +188,6 @@
   border-radius: var(--radius-md);
   padding: 14px;
   cursor: pointer;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .regulation-card:hover {
   background: var(--bg-card-hover);
@@ -197,7 +248,6 @@
   align-items: center;
   gap: 4px;
   font-weight: 500;
-  transition: all 0.2s ease;
 }
 .regulation-card:hover .btn-view-reg {
   color: #fff;
@@ -212,14 +262,12 @@
   border-top: 1px solid var(--border-color);
   cursor: pointer;
   background: rgba(255, 255, 255, 0.01);
-  transition: all 0.2s ease;
 }
 .feed-view-all:hover {
   background: rgba(255, 255, 255, 0.04);
   color: #fff;
 }
 
-/* Badges */
 .risk-badge {
   font-size: 10px;
   font-weight: 600;
@@ -245,7 +293,6 @@
   border: 1px solid rgba(16, 185, 129, 0.35);
 }
 
-/* Regulation Viewer Panel */
 .panel-viewer {
   background: var(--bg-panel);
   border: 1px solid var(--border-color);
@@ -303,7 +350,6 @@
   font-weight: 500;
 }
 
-/* Tabs */
 .viewer-tabs {
   display: flex;
   border-bottom: 1px solid var(--border-color);
@@ -321,7 +367,6 @@
   border-bottom: 2px solid transparent;
   white-space: nowrap;
   font-weight: 500;
-  transition: all 0.2s ease;
 }
 .viewer-tab-btn:hover { color: #fff; }
 .viewer-tab-btn.active {
@@ -330,7 +375,6 @@
   font-weight: 600;
 }
 
-/* Viewer Body */
 .viewer-body {
   padding: 22px;
   display: flex;
@@ -370,7 +414,6 @@
   border-radius: var(--radius-sm);
   padding: 14px 16px;
   margin-bottom: 10px;
-  transition: all 0.2s ease;
 }
 .article-card:hover {
   border-color: var(--border-subtle);
@@ -398,7 +441,6 @@
   line-height: 1.6;
 }
 
-/* AI Interpretation Cards */
 .analysis-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -413,7 +455,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .analysis-card:hover {
   border-color: var(--accent-purple);
@@ -470,7 +511,6 @@
   transform: translateX(3px);
 }
 
-/* Entities */
 .entities-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -484,7 +524,6 @@
   padding: 12px;
   display: flex;
   flex-direction: column;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .entity-card:hover {
   border-color: var(--border-subtle);
@@ -530,7 +569,6 @@
   border-color: var(--border-subtle);
 }
 
-/* Modals */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -541,7 +579,7 @@
   justify-content: center;
   z-index: 100;
   padding: 16px;
-  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fadeIn 0.2s ease-out;
 }
 
 .modal-dialog {
@@ -553,6 +591,7 @@
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
+  animation: scaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modal-header {
@@ -617,6 +656,9 @@
   font-size: 12px;
   font-weight: 600;
   box-shadow: 0 2px 10px rgba(139, 92, 246, 0.35);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 .btn-primary:hover {
   background: var(--accent-purple-hover);

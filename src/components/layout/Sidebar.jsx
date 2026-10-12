@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { 
   Radar, 
   Cpu, 
@@ -10,10 +10,24 @@ import {
   Settings, 
   Search,
   ChevronDown,
-  ChevronLeft
+  ChevronLeft,
+  ChevronRight,
+  LogOut,
+  User,
+  X
 } from 'lucide-react';
 
-export default function Sidebar({ activeNav = 'AI Regulatory Intelligence Layer', onSelectNav }) {
+export default function Sidebar({ 
+  activeNav, 
+  onSelectNav, 
+  isCollapsed = false, 
+  onToggleCollapse 
+}) {
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const searchInputRef = useRef(null);
+  const profileMenuRef = useRef(null);
+
   const navItems = [
     { label: "Global Dashboard & Risk Radar", icon: Radar },
     { label: "AI Regulatory Intelligence Layer", icon: Cpu },
@@ -23,72 +37,151 @@ export default function Sidebar({ activeNav = 'AI Regulatory Intelligence Layer'
     { label: "Consulting & Expert Marketplace", icon: Briefcase },
   ];
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === '/' && document.activeElement !== searchInputRef.current) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
+        setProfileOpen(false);
+      }
+    };
+    if (profileOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [profileOpen]);
+
+  const filteredNav = navItems.filter((item) =>
+    item.label.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''}`}>
       <div className="sidebar-brand">
         <div className="brand-wrapper">
           <div className="brand-icon">F</div>
-          <div>
-            <div className="brand-title">Finsentsis</div>
-            <div className="brand-subtitle">Operating System</div>
-          </div>
+          {!isCollapsed && (
+            <div>
+              <div className="brand-title">Finsentsis</div>
+              <div className="brand-subtitle">Operating System</div>
+            </div>
+          )}
         </div>
-        <button className="sidebar-collapse-btn" aria-label="Collapse sidebar">
-          <ChevronLeft size={16} />
+        <button 
+          className="sidebar-collapse-btn" 
+          onClick={onToggleCollapse}
+          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
       </div>
 
-      <div className="sidebar-search-container">
-        <div className="sidebar-search-box">
-          <Search size={14} color="#64748b" />
-          <input 
-            type="text" 
-            placeholder="Search for anything" 
-            className="sidebar-search-input" 
-          />
-          <span className="kbd-shortcut">/</span>
+      {!isCollapsed && (
+        <div className="sidebar-search-container">
+          <div className="sidebar-search-box">
+            <Search size={14} color="#64748b" />
+            <input 
+              ref={searchInputRef}
+              type="text" 
+              placeholder="Search navigation" 
+              className="sidebar-search-input" 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {searchTerm ? (
+              <button onClick={() => setSearchTerm('')} aria-label="Clear navigation search">
+                <X size={12} color="#94a3b8" />
+              </button>
+            ) : (
+              <span className="kbd-shortcut">/</span>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="sidebar-nav">
         <div className="nav-section-title">
           <span>Dashboard</span>
-          <ChevronDown size={12} />
+          {!isCollapsed && <ChevronDown size={12} />}
         </div>
 
-        {navItems.map((item) => {
+        {filteredNav.map((item) => {
           const Icon = item.icon;
           const isActive = activeNav === item.label;
           return (
             <div 
               key={item.label}
               className={`nav-item ${isActive ? 'active' : ''}`}
-              onClick={() => onSelectNav && onSelectNav(item.label)}
+              onClick={() => onSelectNav(item.label)}
+              title={isCollapsed ? item.label : undefined}
             >
-              <Icon size={15} />
+              <Icon size={16} />
               <span>{item.label}</span>
             </div>
           );
         })}
+
+        {filteredNav.length === 0 && !isCollapsed && (
+          <div style={{ padding: '12px 10px', fontSize: '11px', color: '#64748b' }}>
+            No modules found.
+          </div>
+        )}
       </div>
 
-      <div className="sidebar-bottom">
-        <div className="nav-item" onClick={() => onSelectNav && onSelectNav('Help and Support')}>
-          <HelpCircle size={15} />
+      <div className="sidebar-bottom" ref={profileMenuRef}>
+        <div 
+          className={`nav-item ${activeNav === 'Help and Support' ? 'active' : ''}`} 
+          onClick={() => onSelectNav('Help and Support')}
+          title="Help and Support"
+        >
+          <HelpCircle size={16} />
           <span>Help and Support</span>
         </div>
-        <div className="nav-item" onClick={() => onSelectNav && onSelectNav('Settings')}>
-          <Settings size={15} />
+        <div 
+          className={`nav-item ${activeNav === 'Settings' ? 'active' : ''}`} 
+          onClick={() => onSelectNav('Settings')}
+          title="Settings"
+        >
+          <Settings size={16} />
           <span>Settings</span>
         </div>
 
-        <div className="user-profile" style={{ marginTop: '8px' }}>
+        {profileOpen && !isCollapsed && (
+          <div className="profile-dropdown-menu">
+            <div className="profile-dropdown-item" onClick={() => { setProfileOpen(false); onSelectNav('User Profile'); }}>
+              <User size={13} /> View Profile
+            </div>
+            <div className="profile-dropdown-item" onClick={() => { setProfileOpen(false); onSelectNav('Settings'); }}>
+              <Settings size={13} /> Account Settings
+            </div>
+            <div className="profile-dropdown-item" style={{ color: '#f87171' }} onClick={() => { setProfileOpen(false); onSelectNav('Sign Out'); }}>
+              <LogOut size={13} /> Sign Out
+            </div>
+          </div>
+        )}
+
+        <div 
+          className="user-profile" 
+          style={{ marginTop: '8px' }} 
+          onClick={() => setProfileOpen(prev => !prev)}
+          title="Sophie Bennett (Account)"
+        >
           <div className="user-avatar">SB</div>
           <div className="user-details">
             <div className="user-name">Sophie Bennett</div>
             <div className="user-email">sophie@finsentsis.com</div>
           </div>
-          <ChevronDown size={14} color="#64748b" />
+          <ChevronDown size={14} color="#64748b" className="user-profile-chevron" />
         </div>
       </div>
     </aside>
