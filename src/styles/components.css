@@ -8,9 +8,9 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   overflow-x: auto;
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(16px);
   scrollbar-width: none;
-  animation: smoothFadeUp 0.35s var(--ease-spring);
+  animation: macPagePop 0.4s var(--ease-apple-spring);
 }
 .quick-action-bar::-webkit-scrollbar { display: none; }
 
@@ -35,22 +35,22 @@
   font-size: 11.5px;
   color: var(--text-secondary);
   white-space: nowrap;
-  transition: all 0.25s var(--ease-spring);
+  transition: transform 0.24s var(--ease-apple-spring), background 0.2s ease, border-color 0.2s ease;
 }
 .quick-action-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.09);
   color: #fff;
   border-color: var(--border-subtle);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
 }
 
-/* KPI Cards Row */
+/* KPI Cards Row with Mac Dock Scaling */
 .kpi-row {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 12px;
-  animation: smoothFadeUp 0.45s var(--ease-spring);
+  animation: macPagePop 0.45s var(--ease-apple-spring);
 }
 
 .kpi-card {
@@ -64,14 +64,14 @@
   backdrop-filter: blur(14px);
   position: relative;
   will-change: transform, box-shadow;
-  transition: transform 0.3s var(--ease-spring),
-              border-color 0.3s var(--ease-smooth),
-              box-shadow 0.3s var(--ease-spring);
+  transition: transform 0.28s var(--ease-apple-spring),
+              border-color 0.25s var(--ease-apple-out),
+              box-shadow 0.28s var(--ease-apple-spring);
 }
 .kpi-card:hover {
-  border-color: rgba(139, 92, 246, 0.35);
-  transform: translate3d(0, -3px, 0);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 12px rgba(139, 92, 246, 0.15);
+  border-color: rgba(139, 92, 246, 0.45);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55), 0 0 16px rgba(139, 92, 246, 0.2);
 }
 
 .kpi-header {
@@ -113,7 +113,7 @@
   padding: 6px;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.65);
   z-index: 20;
-  animation: smoothScaleIn 0.2s var(--ease-spring);
+  animation: macTabPop 0.22s var(--ease-apple-spring);
 }
 
 .kpi-dropdown-item {
@@ -123,12 +123,12 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.2s var(--ease-smooth);
+  transition: transform 0.2s var(--ease-apple-spring), background 0.15s ease;
 }
 .kpi-dropdown-item:hover {
   background: rgba(255, 255, 255, 0.08);
   color: #fff;
-  transform: translateX(2px);
+  transform: translateX(3px);
 }
 
 /* Feed Panel */
@@ -140,7 +140,7 @@
   flex-direction: column;
   backdrop-filter: blur(14px);
   overflow: hidden;
-  animation: smoothFadeUp 0.5s var(--ease-spring);
+  animation: macPagePop 0.5s var(--ease-apple-spring);
 }
 
 .feed-header {
@@ -178,18 +178,18 @@
   color: var(--text-secondary);
   background: rgba(255, 255, 255, 0.02);
   font-weight: 500;
-  transition: all 0.25s var(--ease-spring);
+  transition: transform 0.22s var(--ease-apple-spring), background 0.2s ease, border-color 0.2s ease;
 }
 .filter-pill:hover {
   color: #fff;
   border-color: var(--border-subtle);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 .filter-pill.active {
   background: var(--accent-purple-dim);
   border-color: var(--accent-purple);
   color: #ddd6fe;
-  box-shadow: 0 0 10px rgba(139, 92, 246, 0.25);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
 }
 
 .feed-list {
@@ -205,23 +205,23 @@
   border-radius: var(--radius-md);
   padding: 14px;
   cursor: pointer;
-  will-change: transform, border-color, box-shadow;
-  transition: transform 0.25s var(--ease-spring),
-              border-color 0.25s var(--ease-smooth),
-              background 0.25s var(--ease-smooth),
-              box-shadow 0.25s var(--ease-spring);
+  will-change: transform, box-shadow;
+  transition: transform 0.25s var(--ease-apple-spring),
+              border-color 0.2s ease,
+              background 0.2s ease,
+              box-shadow 0.25s var(--ease-apple-spring);
 }
 .regulation-card:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-subtle);
-  transform: translate3d(0, -2px, 0);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
 .regulation-card.selected {
   border-color: var(--accent-purple);
   background: rgba(139, 92, 246, 0.12);
-  box-shadow: 0 0 22px rgba(139, 92, 246, 0.2);
+  box-shadow: 0 0 24px rgba(139, 92, 246, 0.25);
 }
 
 .reg-card-top {
@@ -239,10 +239,6 @@
   padding: 3px 8px;
   border-radius: 4px;
   border: 1px solid rgba(56, 189, 248, 0.25);
-  transition: transform 0.2s var(--ease-spring);
-}
-.regulation-card:hover .reg-source-badge {
-  transform: scale(1.03);
 }
 
 .reg-title {
@@ -274,11 +270,11 @@
   align-items: center;
   gap: 4px;
   font-weight: 500;
-  transition: transform 0.2s var(--ease-spring), color 0.2s ease;
+  transition: transform 0.22s var(--ease-apple-spring), color 0.2s ease;
 }
 .regulation-card:hover .btn-view-reg {
   color: #fff;
-  transform: translate3d(3px, 0, 0);
+  transform: translateX(4px);
 }
 
 .feed-view-all {
@@ -289,7 +285,7 @@
   border-top: 1px solid var(--border-color);
   cursor: pointer;
   background: rgba(255, 255, 255, 0.01);
-  transition: all 0.25s var(--ease-smooth);
+  transition: background 0.2s ease, color 0.2s ease;
 }
 .feed-view-all:hover {
   background: rgba(255, 255, 255, 0.05);
@@ -305,10 +301,6 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  transition: transform 0.2s var(--ease-spring);
-}
-.regulation-card:hover .risk-badge {
-  transform: scale(1.02);
 }
 .risk-critical {
   background: var(--risk-critical-bg);
@@ -333,9 +325,8 @@
   border-radius: var(--radius-md);
   display: flex;
   flex-direction: column;
-  backdrop-filter: blur(14px);
+  backdrop-filter: blur(16px);
   overflow: hidden;
-  animation: smoothFadeUp 0.55s var(--ease-spring);
 }
 
 .viewer-header {
@@ -385,7 +376,7 @@
   font-weight: 500;
 }
 
-/* Tabs with sliding underline effect */
+/* Tabs */
 .viewer-tabs {
   display: flex;
   border-bottom: 1px solid var(--border-color);
@@ -403,17 +394,17 @@
   border-bottom: 2px solid transparent;
   white-space: nowrap;
   font-weight: 500;
-  transition: all 0.25s var(--ease-smooth);
+  transition: color 0.2s ease, transform 0.22s var(--ease-apple-spring);
 }
 .viewer-tab-btn:hover {
   color: #fff;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 .viewer-tab-btn.active {
   color: #ffffff;
   border-bottom-color: var(--accent-purple);
   font-weight: 600;
-  box-shadow: inset 0 -4px 10px rgba(139, 92, 246, 0.2);
+  box-shadow: inset 0 -4px 12px rgba(139, 92, 246, 0.25);
 }
 
 /* Viewer Body */
@@ -444,11 +435,11 @@
   align-items: center;
   gap: 5px;
   font-weight: 500;
-  transition: transform 0.2s var(--ease-spring), color 0.2s ease;
+  transition: transform 0.22s var(--ease-apple-spring), color 0.2s ease;
 }
 .btn-link-action:hover {
   color: #fff;
-  transform: translate3d(3px, 0, 0);
+  transform: translateX(4px);
 }
 
 .article-card {
@@ -457,14 +448,14 @@
   border-radius: var(--radius-sm);
   padding: 14px 16px;
   margin-bottom: 10px;
-  transition: transform 0.25s var(--ease-spring),
-              border-color 0.25s var(--ease-smooth),
-              background 0.25s var(--ease-smooth);
+  transition: transform 0.25s var(--ease-apple-spring),
+              border-color 0.2s ease,
+              background 0.2s ease;
 }
 .article-card:hover {
   border-color: var(--border-subtle);
   background: var(--bg-card-hover);
-  transform: translate3d(0, -2px, 0);
+  transform: translateY(-2px);
 }
 
 .article-num {
@@ -488,7 +479,7 @@
   line-height: 1.6;
 }
 
-/* AI Interpretation Cards */
+/* AI Interpretation Cards with Spring Pop */
 .analysis-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -504,14 +495,14 @@
   flex-direction: column;
   justify-content: space-between;
   will-change: transform, box-shadow;
-  transition: transform 0.3s var(--ease-spring),
-              border-color 0.3s var(--ease-smooth),
-              box-shadow 0.3s var(--ease-spring);
+  transition: transform 0.3s var(--ease-apple-spring),
+              border-color 0.25s ease,
+              box-shadow 0.3s var(--ease-apple-spring);
 }
 .analysis-card:hover {
   border-color: var(--accent-purple);
-  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.25);
-  transform: translate3d(0, -3px, 0);
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.3);
+  transform: translateY(-4px) scale(1.015);
 }
 
 .analysis-card-title {
@@ -542,10 +533,10 @@
   font-size: 11.5px;
   color: #cbd5e1;
   line-height: 1.4;
-  transition: transform 0.2s var(--ease-spring);
+  transition: transform 0.2s var(--ease-apple-spring);
 }
 .analysis-card:hover .analysis-item-row {
-  transform: translate3d(2px, 0, 0);
+  transform: translateX(3px);
 }
 
 .analysis-arrow {
@@ -561,11 +552,11 @@
   align-items: center;
   gap: 5px;
   font-weight: 500;
-  transition: transform 0.2s var(--ease-spring), color 0.2s ease;
+  transition: transform 0.22s var(--ease-apple-spring), color 0.2s ease;
 }
 .btn-view-analysis:hover {
   color: #fff;
-  transform: translate3d(3px, 0, 0);
+  transform: translateX(4px);
 }
 
 /* Impacted Entities */
@@ -582,14 +573,14 @@
   padding: 12px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.25s var(--ease-spring),
-              border-color 0.25s var(--ease-smooth),
-              box-shadow 0.25s var(--ease-spring);
+  transition: transform 0.25s var(--ease-apple-spring),
+              border-color 0.2s ease,
+              box-shadow 0.25s var(--ease-apple-spring);
 }
 .entity-card:hover {
   border-color: var(--border-subtle);
-  transform: translate3d(0, -3px, 0);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
 .entity-name {
@@ -623,27 +614,26 @@
   border-radius: var(--radius-sm);
   text-align: center;
   background: rgba(255, 255, 255, 0.02);
-  transition: all 0.2s var(--ease-smooth);
+  transition: all 0.2s ease;
 }
 .entity-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.09);
   color: #fff;
   border-color: var(--border-subtle);
   transform: translateY(-1px);
 }
 
-/* Modals */
+/* Apple Window Sheet Modals */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.82);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(14px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
   padding: 16px;
-  animation: smoothFadeUp 0.25s var(--ease-spring);
 }
 
 .modal-dialog {
@@ -652,10 +642,9 @@
   border-radius: var(--radius-lg);
   width: 100%;
   max-width: 520px;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 1px 1px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.85), 0 0 1px 1px rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
-  animation: smoothScaleIn 0.28s var(--ease-spring);
 }
 
 .modal-header {
@@ -709,7 +698,7 @@
 }
 .form-input:focus, .form-textarea:focus, .form-select:focus {
   border-color: var(--accent-purple);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.3);
 }
 
 .btn-primary {
@@ -723,12 +712,12 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.25s var(--ease-spring);
+  transition: transform 0.22s var(--ease-apple-spring), box-shadow 0.2s ease, background 0.2s ease;
 }
 .btn-primary:hover {
   background: var(--accent-purple-hover);
-  box-shadow: 0 4px 18px rgba(139, 92, 246, 0.55);
-  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.55);
+  transform: translateY(-2px);
 }
 
 .btn-secondary {
@@ -738,7 +727,7 @@
   border-radius: var(--radius-sm);
   font-size: 12px;
   border: 1px solid var(--border-color);
-  transition: all 0.25s var(--ease-smooth);
+  transition: all 0.2s ease;
 }
 .btn-secondary:hover {
   background: rgba(255, 255, 255, 0.1);

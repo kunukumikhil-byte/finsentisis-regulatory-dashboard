@@ -17,14 +17,14 @@ export default function RegulationViewer({
 
   if (!regulation) {
     return (
-      <div className="panel-viewer" style={{ padding: '32px', textAlign: 'center', color: '#94a3b8' }}>
+      <div className="panel-viewer mac-page-pop" style={{ padding: '32px', textAlign: 'center', color: '#94a3b8' }}>
         No regulation selected.
       </div>
     );
   }
 
   return (
-    <div className="panel-viewer">
+    <div className="panel-viewer mac-page-pop" key={regulation.id}>
       <div className="viewer-header">
         <div>
           <div className="viewer-title-row">
@@ -57,9 +57,10 @@ export default function RegulationViewer({
 
       <RegulationTabs activeTab={activeTab} onSelectTab={setActiveTab} />
 
-      <div className="viewer-body">
+      {/* Tab container with Apple Safari-style page pop effect */}
+      <div className="viewer-body mac-tab-pop" key={activeTab}>
         {activeTab === 'Overview' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', animation: 'fadeIn 0.25s ease' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             <RegulationText 
               articles={showAllArticles ? regulation.articles : regulation.articles.slice(0, 3)} 
               onViewAll={() => setShowAllArticles(prev => !prev)} 
@@ -76,11 +77,11 @@ export default function RegulationViewer({
         )}
 
         {activeTab === 'Full Text' && (
-          <div style={{ padding: '10px 0', animation: 'fadeIn 0.25s ease' }}>
-            <h4 style={{ color: '#fff', marginBottom: '8px', fontSize: '13px' }}>
+          <div style={{ padding: '4px 0' }}>
+            <h4 style={{ color: '#fff', marginBottom: '8px', fontSize: '13.5px' }}>
               Consolidated Legal Text — {regulation.title}
             </h4>
-            <p style={{ color: '#94a3b8', fontSize: '12.5px', marginBottom: '14px' }}>
+            <p style={{ color: '#94a3b8', fontSize: '12.5px', marginBottom: '16px' }}>
               Official text copy verified by {regulation.sourceAuthority}. Sets harmonized criteria for high-risk AI models and accountability pipelines.
             </p>
             {regulation.articles.map((art) => (
@@ -94,7 +95,7 @@ export default function RegulationViewer({
         )}
 
         {activeTab === 'Amendment History' && (
-          <div style={{ padding: '10px 0', color: '#94a3b8', fontSize: '12.5px', animation: 'fadeIn 0.25s ease' }}>
+          <div style={{ padding: '4px 0', color: '#94a3b8', fontSize: '12.5px' }}>
             <div className="article-card">
               <div className="article-num">Update 1.0.3 • August 2025</div>
               <div className="article-title">Realignment with Harmonised Technical Standards</div>
@@ -103,13 +104,13 @@ export default function RegulationViewer({
             <div className="article-card">
               <div className="article-num">Update 1.0.2 • June 2025</div>
               <div className="article-title">Transparency Clarification for GPAI Models</div>
-              <div className="article-desc">Systemic risk indicators codified for foundation models exceeding $10^{25}$ FLOPs training thresholds.</div>
+              <div className="article-desc">Systemic risk indicators codified for foundation models exceeding 10^25 FLOPs training thresholds.</div>
             </div>
           </div>
         )}
 
         {activeTab === 'Jurisdiction' && (
-          <div style={{ padding: '10px 0', color: '#94a3b8', fontSize: '12.5px', animation: 'fadeIn 0.25s ease' }}>
+          <div style={{ padding: '4px 0', color: '#94a3b8', fontSize: '12.5px' }}>
             <div className="article-card">
               <div className="article-num">Applicable Region</div>
               <div className="article-title">{regulation.jurisdiction}</div>
@@ -121,7 +122,7 @@ export default function RegulationViewer({
         )}
 
         {activeTab === 'Related Laws' && (
-          <div style={{ padding: '10px 0', color: '#94a3b8', fontSize: '12.5px', animation: 'fadeIn 0.25s ease' }}>
+          <div style={{ padding: '4px 0', color: '#94a3b8', fontSize: '12.5px' }}>
             <div className="article-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
                 <div className="article-title">Regulation (EU) 2016/679 (GDPR)</div>
@@ -140,7 +141,7 @@ export default function RegulationViewer({
         )}
 
         {activeTab === 'Interpretation Log' && (
-          <div style={{ padding: '10px 0', color: '#94a3b8', fontSize: '12.5px', animation: 'fadeIn 0.25s ease' }}>
+          <div style={{ padding: '4px 0', color: '#94a3b8', fontSize: '12.5px' }}>
             <div className="article-card">
               <div className="article-num">Audit Verification Log</div>
               <div className="article-title">Autonomous Scan Execution #8924</div>

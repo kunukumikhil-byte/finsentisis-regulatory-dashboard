@@ -16,7 +16,11 @@ export default function Modal({ isOpen, onClose, title, children, footer }) {
 
   return (
     <div className="modal-overlay" onClick={onClose}>
-      <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+      <div 
+        className="modal-dialog" 
+        style={{ animation: 'macSheetOpen 0.38s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="modal-header">
           <h3 className="modal-title">{title}</h3>
           <button className="header-icon-btn" onClick={onClose} aria-label="Close modal">
