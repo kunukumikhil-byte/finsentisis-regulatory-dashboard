@@ -15,7 +15,7 @@ export default function App() {
   const [selectedRegulation, setSelectedRegulation] = useState(null);
   const [analysisData, setAnalysisData] = useState(null);
   const [entitiesData, setEntitiesData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
   const [isWorkflowOpen, setIsWorkflowOpen] = useState(false);
@@ -25,7 +25,6 @@ export default function App() {
   useEffect(() => {
     async function loadData() {
       try {
-        setLoading(true);
         const regs = await regulationService.getRegulations();
         setRegulations(regs);
         if (regs.length > 0) {
@@ -39,8 +38,6 @@ export default function App() {
         }
       } catch (err) {
         console.error("Failed to load initial data", err);
-      } finally {
-        setLoading(false);
       }
     }
     loadData();
@@ -88,9 +85,18 @@ export default function App() {
 
   return (
     <div className="app-container">
-      <Sidebar />
+      <div 
+        className={`sidebar-overlay ${mobileMenuOpen ? 'active' : ''}`} 
+        onClick={() => setMobileMenuOpen(false)} 
+      />
+
+      <div className={`sidebar ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+        <Sidebar onSelectNav={() => setMobileMenuOpen(false)} />
+      </div>
+
       <div className="main-wrapper">
         <Header 
+          onToggleSidebar={() => setMobileMenuOpen(prev => !prev)}
           onOpenCopilot={() => setIsCopilotOpen(true)}
           onOpenSettings={() => alert("Settings panel will connect to NestJS configuration.")}
           onOpenNotifications={() => alert("0 unread alerts: All systems compliant.")}

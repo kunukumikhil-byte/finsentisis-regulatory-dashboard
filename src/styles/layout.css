@@ -3,6 +3,7 @@
   min-height: 100vh;
   background-color: var(--bg-app);
   position: relative;
+  overflow-x: hidden;
 }
 
 .sidebar {
@@ -14,12 +15,22 @@
   position: sticky;
   top: 0;
   height: 100vh;
-  z-index: 40;
+  z-index: 50;
   flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
+  z-index: 45;
 }
 
 .sidebar-brand {
-  padding: 18px 16px 14px;
+  padding: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -32,22 +43,24 @@
 }
 
 .brand-icon {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   background: linear-gradient(135deg, #a78bfa, #6d28d9);
-  border-radius: 6px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   color: #fff;
-  font-size: 15px;
+  font-size: 16px;
+  box-shadow: 0 0 10px rgba(109, 40, 217, 0.4);
 }
 
 .brand-title {
   font-size: 14px;
   font-weight: 600;
   color: #ffffff;
+  letter-spacing: -0.2px;
 }
 
 .brand-subtitle {
@@ -57,8 +70,12 @@
 
 .sidebar-collapse-btn {
   color: var(--text-muted);
-  padding: 4px;
-  border-radius: 4px;
+  padding: 6px;
+  border-radius: var(--radius-sm);
+}
+.sidebar-collapse-btn:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
 }
 
 .sidebar-search-container {
@@ -71,8 +88,12 @@
   background-color: var(--bg-input);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 6px 10px;
+  padding: 7px 12px;
   gap: 8px;
+}
+.sidebar-search-box:focus-within {
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
 }
 
 .sidebar-search-input {
@@ -88,8 +109,8 @@
   background-color: #212738;
   border: 1px solid #31394f;
   padding: 1px 6px;
-  border-radius: 3px;
-  font-size: 11px;
+  border-radius: 4px;
+  font-size: 10px;
   color: var(--text-muted);
 }
 
@@ -101,9 +122,11 @@
 
 .nav-section-title {
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   color: var(--text-muted);
-  padding: 6px 8px;
+  padding: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -113,25 +136,27 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px 10px;
+  padding: 9px 12px;
   border-radius: var(--radius-md);
   color: var(--text-secondary);
   font-size: 12.5px;
-  transition: all 0.15s ease;
-  margin-bottom: 2px;
+  margin-bottom: 3px;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .nav-item:hover {
-  background-color: rgba(255, 255, 255, 0.04);
+  background-color: rgba(255, 255, 255, 0.05);
   color: var(--text-primary);
+  transform: translateX(2px);
 }
 
 .nav-item.active {
   background-color: var(--accent-purple-dim);
-  color: #c4b5fd;
-  font-weight: 500;
-  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #ddd6fe;
+  font-weight: 600;
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  box-shadow: inset 0 0 10px rgba(139, 92, 246, 0.1);
 }
 
 .sidebar-bottom {
@@ -143,21 +168,24 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 8px;
+  padding: 8px 10px;
   border-radius: var(--radius-md);
   cursor: pointer;
   background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
 }
 
 .user-profile:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: var(--border-subtle);
 }
 
 .user-avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -173,7 +201,7 @@
 
 .user-name {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -196,16 +224,34 @@
 }
 
 .top-header {
-  height: 48px;
+  height: 52px;
   border-bottom: 1px solid var(--border-color);
-  background-color: var(--bg-header);
+  background-color: rgba(14, 17, 24, 0.85);
+  backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
   position: sticky;
   top: 0;
-  z-index: 30;
+  z-index: 40;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  color: var(--text-primary);
+  padding: 6px;
+  border-radius: var(--radius-sm);
+}
+
+.mobile-menu-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 .breadcrumb {
@@ -224,61 +270,61 @@
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .btn-copilot {
   background: linear-gradient(135deg, #7c3aed, #6d28d9);
   color: #ffffff;
-  padding: 5px 12px;
-  border-radius: 16px;
+  padding: 6px 14px;
+  border-radius: 20px;
   font-size: 11.5px;
-  font-weight: 500;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 6px;
   border: 1px solid rgba(167, 139, 250, 0.4);
-  box-shadow: 0 0 10px rgba(124, 58, 237, 0.25);
-  transition: opacity 0.15s;
+  animation: pulseGlow 4s infinite ease-in-out;
 }
 
 .btn-copilot:hover {
-  opacity: 0.9;
+  opacity: 0.95;
+  transform: translateY(-1px);
 }
 
 .header-icon-btn {
   color: var(--text-secondary);
-  padding: 6px;
-  border-radius: 4px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .header-icon-btn:hover {
   color: var(--text-primary);
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.07);
 }
 
 .dashboard-content {
-  padding: 16px 20px 40px;
+  padding: 16px 20px 48px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-}
-
-.dashboard-heading-area {
-  margin-top: 4px;
+  gap: 18px;
+  animation: fadeIn 0.4s ease-out;
 }
 
 .dashboard-title {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 700;
   color: #fff;
-  letter-spacing: -0.2px;
+  letter-spacing: -0.3px;
 }
 
 .dashboard-subtext {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-top: 3px;
 }
 
 .dashboard-grid {

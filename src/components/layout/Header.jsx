@@ -1,13 +1,23 @@
 import React from 'react';
-import { Sparkles, Bell, Settings, HelpCircle } from 'lucide-react';
+import { Sparkles, Bell, Settings, HelpCircle, Menu } from 'lucide-react';
 
-export default function Header({ onOpenCopilot, onOpenSettings, onOpenNotifications }) {
+export default function Header({ onOpenCopilot, onOpenSettings, onOpenNotifications, onToggleSidebar }) {
   return (
     <header className="top-header">
-      <div className="breadcrumb">
-        <span>Dashboard</span>
-        <span>/</span>
-        <span className="current">AI Regulatory Intelligence Layer</span>
+      <div className="header-left">
+        <button 
+          className="mobile-menu-btn" 
+          onClick={onToggleSidebar}
+          aria-label="Toggle navigation menu"
+        >
+          <Menu size={20} />
+        </button>
+
+        <div className="breadcrumb">
+          <span>Dashboard</span>
+          <span>/</span>
+          <span className="current">AI Regulatory Intelligence Layer</span>
+        </div>
       </div>
 
       <div className="header-actions">
@@ -17,15 +27,15 @@ export default function Header({ onOpenCopilot, onOpenSettings, onOpenNotificati
         </button>
 
         <button className="header-icon-btn" onClick={onOpenNotifications} title="Notifications">
-          <Bell size={15} />
+          <Bell size={16} />
         </button>
 
         <button className="header-icon-btn" onClick={onOpenSettings} title="Settings">
-          <Settings size={15} />
+          <Settings size={16} />
         </button>
 
         <button className="header-icon-btn" title="Help">
-          <HelpCircle size={15} />
+          <HelpCircle size={16} />
         </button>
       </div>
     </header>
