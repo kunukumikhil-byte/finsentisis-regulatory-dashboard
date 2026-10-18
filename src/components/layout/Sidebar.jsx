@@ -16,7 +16,6 @@ import {
   User,
   X
 } from 'lucide-react';
-import FinsentsisLogo from '../common/FinsentsisLogo';
 
 export default function Sidebar({ 
   activeNav, 
@@ -70,10 +69,20 @@ export default function Sidebar({
   return (
     <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isMobileOpen ? 'mobile-open' : ''}`}>
       <div className="sidebar-brand">
-        <div className="brand-wrapper" onClick={() => onSelectNav('AI Regulatory Intelligence Layer')} style={{ cursor: 'pointer' }}>
-          <div className="brand-logo-container" title="Finsentsis OS">
-            <FinsentsisLogo size={28} className="brand-svg" />
+        <div 
+          className="brand-wrapper" 
+          onClick={() => onSelectNav('AI Regulatory Intelligence Layer')}
+          style={{ cursor: 'pointer' }}
+        >
+          {/* Logo replaces the purple "F" box */}
+          <div className="brand-logo-badge" title="Finsentsis">
+            <img 
+              src="./logo.svg" 
+              alt="Finsentsis Logo" 
+              className="brand-logo-img" 
+            />
           </div>
+          
           {(!isCollapsed || isMobileOpen) && (
             <div>
               <div className="brand-title">Finsentsis</div>
