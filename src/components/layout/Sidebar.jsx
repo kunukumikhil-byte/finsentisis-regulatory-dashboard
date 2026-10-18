@@ -77,7 +77,7 @@ export default function Sidebar({
           {/* Logo replaces the purple "F" box */}
           <div className="brand-logo-badge" title="Finsentsis">
             <img 
-              src="./logo.svg" 
+              src={`${import.meta.env.BASE_URL}logo.svg`} 
               alt="Finsentsis Logo" 
               className="brand-logo-img" 
             />
