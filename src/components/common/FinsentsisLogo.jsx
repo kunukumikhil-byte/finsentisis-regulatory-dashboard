@@ -1,0 +1,30 @@
+import React from 'react';
+
+export default function FinsentsisLogo({ size = 32, className = '' }) {
+  return (
+    <svg 
+      width={size} 
+      height={size} 
+      viewBox="0 0 100 100" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+      className={`finsentsis-brand-logo ${className}`}
+      style={{ display: 'block', flexShrink: 0 }}
+      aria-label="Finsentsis Logo"
+    >
+      <path 
+        d="M33 7C38 15 50 16 68 17C61 20 54 21 42 22C34 23 30 21 28 18C31 24 37 28 47 29C40 31 34 30 29 28C33 34 40 37 45 37C39 39 33 38 27 35C29 42 36 47 43 47C35 49 29 46 27 43C28 50 35 55 42 55C32 57 26 53 26 52C28 62 38 68 42 70C35 70 31 67 31 65C35 75 46 80 49 81C43 80 39 76 39 74C45 83 55 87 60 93C53 87 49 84 46 76C48 78 52 82 59 84C55 79 51 74 46 68C48 70 54 74 61 74C56 66 52 62 48 56C51 61 57 66 64 66C59 58 55 53 49 46C56 46 66 46 75 37C63 37 55 44 49 44C51 38 53 32 58 27C67 27 73 24 75 22C73 27 67 31 60 32C64 30 65 25 61 21C59 23 55 21 55 21C61 17 67 18 69 17C59 15 48 14 33 7Z" 
+        fill="currentColor"
+      />
+      {/* Central horizontal emblem bars forming the stylized 'F' */}
+      <path 
+        d="M55 37.5C62 37.5 70 37.5 75 37.5C73 40 68 41.5 55 41.5V37.5Z" 
+        fill="currentColor" 
+      />
+      <path 
+        d="M55 47.5C61 47.5 67 47.5 70 47.5C68 50.5 64 52 56 52V47.5Z" 
+        fill="currentColor" 
+      />
+    </svg>
+  );
+}
